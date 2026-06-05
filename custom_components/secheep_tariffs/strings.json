@@ -1,0 +1,15 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "SECHEEP Tariffs",
+        "description": "Configure SECHEEP electricity tariff data.",
+        "data": {
+          "service_area": "Service area",
+          "subsidy_profile": "Subsidy profile"
+        }
+      }
+    }
+  }
+}
+
