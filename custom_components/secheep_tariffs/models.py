@@ -67,3 +67,44 @@ class NormalizedTariff:
         data = asdict(self)
         data["effective_date"] = self.effective_date.isoformat()
         return data
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "NormalizedTariff":
+        return cls(
+            provider=data["provider"],
+            service_area=data["service_area"],
+            effective_date=date.fromisoformat(data["effective_date"]),
+            source_url=data["source_url"],
+            resolution=data.get("resolution"),
+            currency=data["currency"],
+            billing_period=BillingPeriod(**data["billing_period"]),
+            profiles=[
+                TariffProfile(
+                    id=profile["id"],
+                    name=profile["name"],
+                    subsidy=profile["subsidy"],
+                    categories=[
+                        TariffCategory(
+                            id=category["id"],
+                            label=category["label"],
+                            min_kwh=category.get("min_kwh"),
+                            max_kwh=category.get("max_kwh"),
+                            fixed_charge_ars=category["fixed_charge_ars"],
+                            bands=[
+                                TariffBand(
+                                    label=band["label"],
+                                    from_kwh=band["from_kwh"],
+                                    to_kwh=band.get("to_kwh"),
+                                    price_ars_per_kwh=band["price_ars_per_kwh"],
+                                    components=band.get("components", {}),
+                                )
+                                for band in category["bands"]
+                            ],
+                        )
+                        for category in profile["categories"]
+                    ],
+                )
+                for profile in data["profiles"]
+            ],
+            schema_version=data.get("schema_version", SCHEMA_VERSION),
+        )

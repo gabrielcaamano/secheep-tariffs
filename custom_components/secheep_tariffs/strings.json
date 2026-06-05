@@ -5,6 +5,22 @@
         "title": "SECHEEP Tariffs",
         "description": "Configure SECHEEP electricity tariff data.",
         "data": {
+          "billing_cycle_kwh": "Billing-cycle kWh",
+          "manual_band_index": "Manual band index",
+          "service_area": "Service area",
+          "subsidy_profile": "Subsidy profile"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "SECHEEP Tariffs",
+        "description": "Update SECHEEP electricity tariff settings.",
+        "data": {
+          "billing_cycle_kwh": "Billing-cycle kWh",
+          "manual_band_index": "Manual band index",
           "service_area": "Service area",
           "subsidy_profile": "Subsidy profile"
         }
@@ -12,4 +28,3 @@
     }
   }
 }
-
