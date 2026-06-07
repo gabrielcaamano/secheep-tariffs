@@ -52,12 +52,16 @@ class SecheepPricingTest(unittest.TestCase):
         self.assertAlmostEqual(result.value, 185.8636)
 
     def test_marginal_price_uses_kwh_edges(self) -> None:
-        at_edge = marginal_price(self.tariff, SUBSIDY_PROFILE_N1, 150)
-        after_edge = marginal_price(self.tariff, SUBSIDY_PROFILE_N1, 151)
+        before_first_edge = marginal_price(self.tariff, SUBSIDY_PROFILE_N1, 49)
+        at_first_edge = marginal_price(self.tariff, SUBSIDY_PROFILE_N1, 50)
+        at_second_edge = marginal_price(self.tariff, SUBSIDY_PROFILE_N1, 150)
+        at_third_edge = marginal_price(self.tariff, SUBSIDY_PROFILE_N1, 300)
 
-        self.assertEqual(at_edge.mode, PRICE_MODE_MARGINAL)
-        self.assertAlmostEqual(at_edge.value, 161.0901)
-        self.assertAlmostEqual(after_edge.value, 185.8636)
+        self.assertEqual(at_second_edge.mode, PRICE_MODE_MARGINAL)
+        self.assertAlmostEqual(before_first_edge.value, 153.1272)
+        self.assertAlmostEqual(at_first_edge.value, 161.0901)
+        self.assertAlmostEqual(at_second_edge.value, 185.8636)
+        self.assertAlmostEqual(at_third_edge.value, 198.2504)
 
     def test_average_and_estimated_cycle_cost(self) -> None:
         average = average_variable_price(self.tariff, SUBSIDY_PROFILE_N1, 200)
@@ -68,6 +72,17 @@ class SecheepPricingTest(unittest.TestCase):
         ) / 200
         self.assertAlmostEqual(average.value, expected_average)
         self.assertAlmostEqual(estimated.value, expected_average * 200 + 2277.31)
+
+    def test_variable_cost_is_progressive_not_highest_band_for_all_kwh(self) -> None:
+        estimated = estimated_cycle_cost(self.tariff, SUBSIDY_PROFILE_N1, 400)
+
+        expected_variable = (
+            (50 * 153.1272)
+            + (100 * 161.0901)
+            + (150 * 185.8636)
+            + (100 * 198.2504)
+        )
+        self.assertAlmostEqual(estimated.value, expected_variable + 2277.31)
 
 
 if __name__ == "__main__":

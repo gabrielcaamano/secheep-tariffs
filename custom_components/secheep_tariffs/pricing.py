@@ -55,7 +55,7 @@ def current_price(
         return PriceResult(None, PRICE_MODE_PROFILE_NOT_CONFIGURED, profile=profile)
 
     if billing_cycle_kwh > 0:
-        band = band_for_kwh(category, billing_cycle_kwh)
+        band = band_for_next_kwh(category, billing_cycle_kwh)
         if band is None:
             return PriceResult(None, PRICE_MODE_MARGINAL, profile, category)
         return PriceResult(
@@ -138,6 +138,16 @@ def band_for_kwh(category: TariffCategory, kwh: float) -> TariffBand | None:
         if kwh < band.from_kwh:
             continue
         if band.to_kwh is None or kwh <= band.to_kwh:
+            return band
+    return category.bands[-1] if category.bands else None
+
+
+def band_for_next_kwh(category: TariffCategory, consumed_kwh: float) -> TariffBand | None:
+    """Return rate for energy consumed after the current cycle total."""
+    for band in category.bands:
+        if consumed_kwh < band.from_kwh:
+            continue
+        if band.to_kwh is None or consumed_kwh < band.to_kwh:
             return band
     return category.bands[-1] if category.bands else None
 
