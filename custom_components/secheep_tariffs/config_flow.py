@@ -65,7 +65,7 @@ class SecheepTariffsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     ) -> config_entries.ConfigFlowResult:
         """Import SECHEEP config from YAML."""
         await self.async_set_unique_id(DOMAIN)
-        self._abort_if_unique_id_configured()
+        self._abort_if_unique_id_configured(updates=_with_defaults(user_input))
         return self.async_create_entry(
             title="SECHEEP Tariffs",
             data=_with_defaults(user_input),
