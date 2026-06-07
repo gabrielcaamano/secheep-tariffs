@@ -2,13 +2,50 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from .const import COORDINATOR, DOMAIN
+import voluptuous as vol
+
+from homeassistant.helpers import config_validation as cv
+
+from .const import (
+    CONF_BILLING_CYCLE_KWH,
+    CONF_MANUAL_BAND_INDEX,
+    CONF_SERVICE_AREA,
+    CONF_SUBSIDY_PROFILE,
+    COORDINATOR,
+    DEFAULT_BILLING_CYCLE_KWH,
+    DEFAULT_MANUAL_BAND_INDEX,
+    DEFAULT_SERVICE_AREA,
+    DOMAIN,
+    SUBSIDY_PROFILE_UNKNOWN,
+)
 
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigEntry
     from homeassistant.core import HomeAssistant
 
 PLATFORMS = ["sensor", "binary_sensor"]
+
+CONFIG_SCHEMA = vol.Schema(
+    {
+        vol.Optional(DOMAIN): vol.Schema(
+            {
+                vol.Optional(
+                    CONF_SERVICE_AREA, default=DEFAULT_SERVICE_AREA
+                ): cv.string,
+                vol.Optional(
+                    CONF_SUBSIDY_PROFILE, default=SUBSIDY_PROFILE_UNKNOWN
+                ): cv.string,
+                vol.Optional(
+                    CONF_BILLING_CYCLE_KWH, default=DEFAULT_BILLING_CYCLE_KWH
+                ): vol.Coerce(float),
+                vol.Optional(
+                    CONF_MANUAL_BAND_INDEX, default=DEFAULT_MANUAL_BAND_INDEX
+                ): vol.Coerce(int),
+            }
+        )
+    },
+    extra=vol.ALLOW_EXTRA,
+)
 
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
