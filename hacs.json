@@ -1,7 +1,6 @@
 {
   "name": "SECHEEP Tariffs",
   "render_readme": true,
-  "domains": ["sensor", "binary_sensor"],
   "country": "AR",
   "homeassistant": "2025.1.0"
 }
