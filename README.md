@@ -22,7 +22,7 @@ The current May 2026 SECHEEP PDF fixture is image-only, so direct primary PDF pa
 
 1. Open HACS.
 2. Select the three-dot menu, then **Custom repositories**.
-3. Add `https://github.com/gabrielcaamano/secheep_tariffs` as an **Integration**.
+3. Add `https://github.com/gabrielcaamano/secheep-tariffs` as an **Integration**.
 4. Install **SECHEEP Tariffs** and restart Home Assistant.
 5. Go to **Settings > Devices & services > Add integration** and select **SECHEEP Tariffs**.
 
